@@ -1,0 +1,17 @@
+{
+  "name": "monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "reinstall": "rm -rf node_modules package-lock.json && npm install",
+    "build": "npm run build --workspaces",
+    "start:weather_service": "npm start --workspace=weather_service"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  }
+}
