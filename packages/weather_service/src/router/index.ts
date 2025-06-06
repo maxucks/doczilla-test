@@ -7,6 +7,7 @@ const ctrl = {
   forecast: new ForecastController(),
 }
 
+router.get("/geocode", ctrl.forecast.getGeoData)
 router.get("/weather", ctrl.forecast.getCityWeather)
 
 export { router }
