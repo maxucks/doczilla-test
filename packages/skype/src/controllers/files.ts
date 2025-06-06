@@ -10,6 +10,15 @@ type DownloadFileRequest = Request<DownloadFileQuery>
 export class FilesController {
   constructor(private files: FilesManager) {}
 
+  public getFiles = async (_: Request, res: Response) => {
+    try {
+      res.json({ files: this.files.state.files })
+    } catch (err) {
+      console.error(err)
+      res.status(500).json({ message: err })
+    }
+  }
+
   public upload = async (req: Request, res: Response) => {
     try {
       const contentDisposition = req.raw.headers["content-disposition"]
