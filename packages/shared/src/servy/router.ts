@@ -14,7 +14,7 @@ export type Request<Q = any> = {
 }
 
 export class Response {
-  constructor(private response: http.ServerResponse) {}
+  constructor(public response: http.ServerResponse) {}
 
   public status = (code: number): Response => {
     this.response.statusCode = code

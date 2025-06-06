@@ -6,7 +6,8 @@
   "scripts": {
     "reinstall": "rm -rf node_modules package-lock.json && npm install",
     "build": "npm run build --workspaces",
-    "dev:weather_service": "npm run dev --workspace=weather_service"
+    "dev:weather_service": "npm run dev --workspace=weather_service",
+    "dev:skype": "npm run dev --workspace=skype"
   },
   "devDependencies": {
     "tsx": "^4.19.3",

@@ -6,6 +6,9 @@
     },
     {
       "path": "./packages/weather_service"
-    }
+    },
+    {
+      "path": "./packages/skype"
+    },
   ]
 }
