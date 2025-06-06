@@ -1,0 +1,14 @@
+networks:
+  kub_net:
+    driver: bridge
+
+volumes:
+  redis-data:
+
+services:
+  redis:
+    image: redis:latest
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    volumes:
+      - redis-data:/data

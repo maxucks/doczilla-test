@@ -1,0 +1,11 @@
+# Запуск
+
+1. npm install
+2. npm run build - this is needed to compile shared lib
+3. npm run start:"service_name" (service_name is "weather_service")
+
+# Процесс решения
+
+- Я решил оставить .env файлы в проекте, чтобы было легче проверить, так как это тестовое, а не реальный прод
+- Я оставил отдельный эндпоинт /geocode, так как в ответе приходит больше одного города
+- Для удобства проверки, каждый из эндпоинтов "GET /weather" и "GET /geocode" возвращает from: "cache/source", cache - значение из кеша, source - из апи
