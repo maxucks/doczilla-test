@@ -9,10 +9,13 @@ export type Config = {
   }
   auth: {
     accessTokenTTL: number
+    secret: string
   }
 }
 
 export function loadConfigFromEnv(): Config {
+  if (!process.env.AUTH_SECRET) throw Error("AUTH_SECRET is required")
+
   return {
     service: {
       port: process.env.SERVICE_PORT ? Number(process.env.SERVICE_PORT) : 8000,
@@ -24,6 +27,7 @@ export function loadConfigFromEnv(): Config {
     },
     auth: {
       accessTokenTTL: process.env.ACCESS_TOKEN_TTL ? Number(process.env.ACCESS_TOKEN_TTL) : 900000, // 15 min by default
+      secret: process.env.AUTH_SECRET,
     },
   }
 }

@@ -2,11 +2,15 @@ import http from "http"
 
 type RouteMap = {
   [path: string]: {
-    [method: string]: HandlerFn
+    [method: string]: {
+      handler: HandlerFn
+      guard: MiddlewareFn | null
+    }
   }
 }
 
-type HandlerFn<Req = Request, Res = Response> = (req: Req, res: Res) => void
+export type HandlerFn<Req = Request, Res = Response> = (req: Req, res: Res) => void
+export type MiddlewareFn<Req = Request, Res = Response> = (req: Req, res: Res) => boolean
 
 export type Request<Q = any> = {
   raw: http.IncomingMessage
@@ -29,20 +33,23 @@ export class Response {
 
 export class Router {
   private routes: RouteMap = {}
+  private middlewares: MiddlewareFn[] = []
 
-  public get = (path: string, handler: HandlerFn) => {
+  public get = (path: string, handler: HandlerFn, opts?: { guard: MiddlewareFn | null }) => {
     if (!this.routes[path]) {
       this.routes[path] = {}
     }
-    this.routes[path].GET = handler
+    this.routes[path].GET = { handler, guard: opts ? opts.guard : null }
   }
 
-  public post = (path: string, handler: HandlerFn) => {
+  public post = (path: string, handler: HandlerFn, opts?: { guard: MiddlewareFn | null }) => {
     if (!this.routes[path]) {
       this.routes[path] = {}
     }
-    this.routes[path].POST = handler
+    this.routes[path].POST = { handler, guard: opts ? opts.guard : null }
   }
+
+  public use = (mw: MiddlewareFn) => this.middlewares.push(mw)
 
   public handler = (req: http.IncomingMessage, res: http.ServerResponse) => {
     if (!req.url || !req.method) return
@@ -72,13 +79,24 @@ export class Router {
       })
     }
 
-    const next = handlers[req.method]
-    if (!next) {
+    if (!handlers[req.method]) {
       return response.status(404).json({
         message: `${req.method} ${req.url}: unregistered method`,
       })
     }
 
-    next(request, response)
+    let next = true
+
+    for (const mw of this.middlewares) {
+      next = mw(request, response)
+      if (!next) break
+    }
+
+    const { handler, guard } = handlers[req.method]!
+
+    if (next && guard) {
+      next = guard(request, response)
+    }
+    if (next) handler(request, response)
   }
 }
