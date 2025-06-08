@@ -6,6 +6,7 @@
   "scripts": {
     "reinstall": "rm -rf node_modules package-lock.json && npm install",
     "build": "npm run build --workspaces",
+    "dev:web": "npm run dev --workspace=web",
     "dev:weather_service": "npm run dev --workspace=weather_service",
     "dev:skype": "npm run dev --workspace=skype"
   },

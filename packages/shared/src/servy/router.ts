@@ -72,6 +72,19 @@ export class Router {
     const response = new Response(res)
     const request: Request = { raw: req, query }
 
+    let next = true
+
+    for (const mw of this.middlewares) {
+      next = mw(request, response)
+      if (!next) break
+    }
+
+    if (req.method === "OPTIONS") {
+      res.writeHead(204)
+      res.end()
+      return
+    }
+
     const handlers = this.routes[url]
     if (!handlers) {
       return response.status(404).json({
@@ -83,13 +96,6 @@ export class Router {
       return response.status(404).json({
         message: `${req.method} ${req.url}: unregistered method`,
       })
-    }
-
-    let next = true
-
-    for (const mw of this.middlewares) {
-      next = mw(request, response)
-      if (!next) break
     }
 
     const { handler, guard } = handlers[req.method]!

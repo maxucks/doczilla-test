@@ -1,0 +1,89 @@
+:root {
+  --fg: rgb(255, 255, 255);
+  --accent: rgb(236, 189, 33);
+  --accent-active: rgb(225, 124, 9);
+  --divider: rgb(203, 203, 203);
+}
+
+.app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 80px 0;
+}
+
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fg);
+  cursor: pointer;
+  outline: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  border: none;
+  background-color: var(--accent);
+  transition: all .12s ease-in-out;
+}
+
+button:hover {
+  background-color: var(--accent-active);
+}
+
+section {
+  padding: 120px 0;
+}
+
+.weather__text {
+  margin-bottom: 16px;
+}
+
+.weather__chart {
+  width: 600px;
+}
+
+.autocomplete {
+  position: relative;
+  margin-bottom: 28px;
+}
+
+.autocomplete__input {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 8px;
+  outline: none;
+  border: 1px solid var(--divider);
+}
+
+.autocomplete__suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: white;
+  border: 1px solid var(--divider);
+  border-radius: 8px;
+  border-top: none;
+  max-height: 150px;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.autocomplete__suggestions li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.autocomplete__suggestions li:hover,
+.autocomplete__suggestions li.active {
+  background-color: var(--fg);
+}
+
+.hidden {
+  display: none;
+}

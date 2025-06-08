@@ -24,7 +24,7 @@ export class AuthGuard {
       return true
     } catch (err) {
       console.error(err)
-      res.status(500).json({ message: err })
+      res.status(401).json({ message: err })
       return false
     }
   }

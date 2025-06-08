@@ -1,0 +1,13 @@
+.flex { display: flex; }
+.col { display: flex; flex-direction: column; }
+
+.col.g-0 { row-gap: 32px; }
+.flex.g-0 { column-gap: 32px; }
+
+.ac { align-items: center; }
+.jc { justify-content: center; }
+.centered { align-items: center; justify-content: center; }
+
+.r-0 { border-radius: 4px; }
+.r-1 { border-radius: 8px; }
+.r-2 { border-radius: 12px; }

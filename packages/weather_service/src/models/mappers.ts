@@ -16,7 +16,7 @@ export function forecastFromJson(json: any): ForecastData {
     longitude: json.longitude,
     hourly: {
       time: json.hourly.time,
-      temperature: json.hourly.temperature,
+      temperature: json.hourly.temperature_2m,
     },
   }
 }

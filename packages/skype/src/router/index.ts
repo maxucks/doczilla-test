@@ -20,7 +20,7 @@ export async function setupRouter(config: Config): Promise<Router> {
   }
 
   const ctrl = {
-    files: new FilesController(managers.files),
+    files: new FilesController(managers.files, managers.token),
     auth: new AuthController(managers.token),
   }
 
@@ -28,8 +28,8 @@ export async function setupRouter(config: Config): Promise<Router> {
 
   router.use((_: Request, res: Response): boolean => {
     res.response.setHeader("Access-Control-Allow-Origin", "*")
-    res.response.setHeader("Access-Control-Allow-Methods", "GET, POST")
-    res.response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization")
+    res.response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+    res.response.setHeader("Access-Control-Allow-Headers", "*")
     res.response.setHeader("Access-Control-Max-Age", "86400")
     return true
   })
@@ -38,7 +38,7 @@ export async function setupRouter(config: Config): Promise<Router> {
 
   router.get("/files", ctrl.files.getFiles)
   router.post("/files", ctrl.files.upload, { guard: guards.auth.verify })
-  router.get("/download", ctrl.files.download, { guard: guards.auth.verify })
+  router.get("/download", ctrl.files.download)
 
   return router
 }

@@ -1,14 +1,15 @@
-import { FilesManager } from "@/managers"
+import { FilesManager, TokenManager } from "@/managers"
 import { Request, Response } from "shared"
 
 type DownloadFileQuery = {
   filename: string
+  token: string
 }
 
 type DownloadFileRequest = Request<DownloadFileQuery>
 
 export class FilesController {
-  constructor(private files: FilesManager) {}
+  constructor(private files: FilesManager, private token: TokenManager) {}
 
   public getFiles = async (_: Request, res: Response) => {
     try {
@@ -21,16 +22,12 @@ export class FilesController {
 
   public upload = async (req: Request, res: Response) => {
     try {
-      const contentDisposition = req.raw.headers["content-disposition"]
-      if (!contentDisposition) {
-        return res.status(400).json({ message: "Missing Content-Disposition header" })
+      const filenameHeader = req.raw.headers["file-name"]
+      if (!filenameHeader) {
+        return res.status(400).json({ message: "Missing File-Name header" })
       }
 
-      const match = contentDisposition.match(/filename="(.+)"/)
-      if (!match || !match[1]) {
-        return res.status(400).json({ message: "Invalid filename" })
-      }
-      const filename = match[1]
+      const filename = filenameHeader as string
 
       await new Promise((resolve, reject) => {
         const fileStream = this.files.writeFileStream(filename)
@@ -47,7 +44,18 @@ export class FilesController {
   }
 
   public download = async (req: DownloadFileRequest, res: Response) => {
-    const { filename } = req.query
+    const { filename, token } = req.query
+
+    if (!token || token === "") {
+      return res.status(400).json({ message: "'token' is required" })
+    }
+
+    try {
+      this.token.verify(token)
+    } catch (_) {
+      return res.status(401).json({ message: "unauthorized: invalid token" })
+    }
+
     if (!filename || filename === "") {
       return res.status(400).json({ message: "'filename' is required" })
     }
