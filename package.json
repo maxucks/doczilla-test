@@ -8,7 +8,8 @@
     "build": "npm run build --workspaces",
     "dev:web": "npm run dev --workspace=web",
     "dev:weather_service": "npm run dev --workspace=weather_service",
-    "dev:skype": "npm run dev --workspace=skype"
+    "dev:skype": "npm run dev --workspace=skype",
+    "start:game": "npm run start --workspace=game"
   },
   "devDependencies": {
     "tsx": "^4.19.3",
